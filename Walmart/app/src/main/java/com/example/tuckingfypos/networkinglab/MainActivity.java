@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
         NetworkInfo networkInfo = conMag.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
             Toast.makeText(MainActivity.this, "Eureka!", Toast.LENGTH_SHORT).show();
-            new DownloadTask().execute("https://api.github.com/users/yuliya-kaleda/repos");
+            new DownloadTask().execute("http://api.walmartlabs.com/v1/");
         } else {
             Toast.makeText(MainActivity.this, "INTERNETS DEAD", Toast.LENGTH_LONG).show();
         }
@@ -96,7 +96,7 @@ public class MainActivity extends AppCompatActivity {
         try{
             URL url = new URL(myUrl);
             HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-            String urlParameters = "param1=a&param2=b";
+            String urlParameters = "search?query=Tea&format=json&apiKey=p2wb5h6mtq4rw84c2d4a55jy";
             //strings need to be turned into bytes so they can be passed properly to other programs
             byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
             int postDataLength = postData.length;
