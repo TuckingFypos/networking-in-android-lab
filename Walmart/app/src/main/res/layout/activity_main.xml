@@ -28,14 +28,10 @@
         android:layout_toRightOf="@id/chocolate_button"/>
 
 
-    <ScrollView
+    <ListView
+        android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/chocolate_button">
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Hello World!" />
-    </ScrollView>
+        android:layout_height="wrap_content"
+        android:layout_below="@id/cereal_button">
+    </ListView>
 </RelativeLayout>

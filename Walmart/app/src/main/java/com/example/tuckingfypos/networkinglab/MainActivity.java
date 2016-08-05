@@ -5,6 +5,10 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,21 +24,67 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     private TextView mText;
+    private Button mButton1;
+    private Button mButton2;
+    private Button mButton3;
+    private ListView mListview;
+
+    ArrayList<String> mItemList;
+    ArrayAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         mText = (TextView) findViewById(R.id.text);
+        mButton1 = (Button) findViewById(R.id.cereal_button);
+        mButton2 = (Button) findViewById(R.id.chocolate_button);
+        mButton3 = (Button) findViewById(R.id.tea_button);
+        mListview = (ListView) findViewById(R.id.listView);
+        mItemList = new ArrayList<>();
+        mAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1,
+                android.R.id.text1, mItemList);
+        mListview.setAdapter(mAdapter);
+
+
+        mButton1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mItemList.clear();
+                new DownloadTask().execute("http://api.walmartlabs.com" +
+                        "/v1/search?apiKey=tp3ecfpvms4jjtmyj9rt2wqg&format=json&query=cereal");
+            }
+
+        });
+
+        mButton2.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                mItemList.clear();
+                new DownloadTask().execute("http://api.walmartlabs.com" +
+                        "/v1/search?apiKey=tp3ecfpvms4jjtmyj9rt2wqg&format=json&query=chocolate");
+            }
+        });
+
+        mButton3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mItemList.clear();
+                new DownloadTask().execute("http://api.walmartlabs.com" +
+                        "/v1/search?apiKey=tp3ecfpvms4jjtmyj9rt2wqg&format=json&query=tea");
+            }
+        });
+
 
         ConnectivityManager conMag = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = conMag.getActiveNetworkInfo();
         if (networkInfo != null && networkInfo.isConnected()) {
-            Toast.makeText(MainActivity.this, "Eureka!", Toast.LENGTH_SHORT).show();
-            new DownloadTask().execute("http://api.walmartlabs.com/v1/");
+            Toast.makeText(MainActivity.this, "Connection Established", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(MainActivity.this, "INTERNETS DEAD", Toast.LENGTH_LONG).show();
         }
@@ -138,7 +188,6 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
             try{
-                //return performPost(strings[0]);
                 return downloadUrl(strings[0]);
             } catch (IOException e){
                 e.printStackTrace();
