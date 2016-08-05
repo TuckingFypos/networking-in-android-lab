@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mItemList.clear();
                 new DownloadTask().execute("http://api.walmartlabs.com" +
-                        "/v1/search?apiKey=tp3ecfpvms4jjtmyj9rt2wqg&format=json&query=cereal");
+                        "/v1/search?apiKey=p2wb5h6mtq4rw84c2d4a55jy&format=json&query=cereal");
             }
 
         });
@@ -67,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mItemList.clear();
                 new DownloadTask().execute("http://api.walmartlabs.com" +
-                        "/v1/search?apiKey=tp3ecfpvms4jjtmyj9rt2wqg&format=json&query=chocolate");
+                        "/v1/search?apiKey=p2wb5h6mtq4rw84c2d4a55jy&format=json&query=chocolate");
             }
         });
 
@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 mItemList.clear();
                 new DownloadTask().execute("http://api.walmartlabs.com" +
-                        "/v1/search?apiKey=tp3ecfpvms4jjtmyj9rt2wqg&format=json&query=tea");
+                        "/v1/search?apiKey=p2wb5h6mtq4rw84c2d4a55jy&format=json&query=tea");
             }
         });
 
@@ -172,36 +172,34 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private String parseJson(String contentAsString) throws JSONException{
-        String repoList = "";
-        JSONArray array = new JSONArray(contentAsString);
-        for (int i=0; i< array.length(); i++){
-            JSONObject repo = array.getJSONObject(i);
-            repoList += repo.getString("name");
-            repoList += "\n";
+    private void parseJson(String contentAsString) throws JSONException{
+        JSONObject search = new JSONObject(contentAsString);
+        JSONArray items = search.getJSONArray("items");
+        for (int i = 0; i < items.length(); i++) {
+
+            JSONObject item = items.getJSONObject(i);
+            mItemList.add(item.getString("name"));
         }
-        return repoList;
-    }
 
-    private class DownloadTask extends AsyncTask<String,Void,String> {
+        private class DownloadTask extends AsyncTask<String,Void,Void> {
 
-        @Override
-        protected String doInBackground(String... strings) {
-            try{
-                return downloadUrl(strings[0]);
-            } catch (IOException e){
-                e.printStackTrace();
-                return "Unable to retrieve web page. URL may be invalid";
-            } catch (JSONException e) {
-                e.printStackTrace();
-                return "JSON Parsing Issue";
+            @Override
+            protected Void doInBackground(String... strings) {
+                try {
+                    downloadUrl(strings[0]);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                return null;
             }
-        }
 
-        @Override
-        protected void onPostExecute(String s) {
-            mText.setText(s);
-        }
+            @Override
+            protected void onPostExecute(Void s) {
+                super.onPostExecute(s);
+                mAdapter.notifyDataSetChanged();
+            }
 
+        }
     }
-}
