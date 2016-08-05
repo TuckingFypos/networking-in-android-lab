@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //make a method that takes a string to be used as a URL
-    public String downloadUrl(String myURL) throws IOException, JSONException {
+    public void downloadUrl(String myURL) throws IOException, JSONException {
         //establish an input stream as null
         InputStream is = null;
         //use a try with the throws above to catch your IOException elsewhere
@@ -111,9 +111,7 @@ public class MainActivity extends AppCompatActivity {
             //make a string for use to use to easily parse the returned data and a method to read it
             String contentAsString = readIt(is);
             //parse the JSON
-            String parsedJson = parseJson(contentAsString);
-            //return the content
-            return parsedJson;
+            parseJson(contentAsString);
             //finally runs no matter the result of the try
         } finally {
             //if the try got far enough in to establish the is, close it when it's done
