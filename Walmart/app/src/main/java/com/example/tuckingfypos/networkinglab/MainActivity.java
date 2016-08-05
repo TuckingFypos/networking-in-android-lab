@@ -139,40 +139,7 @@ public class MainActivity extends AppCompatActivity {
         return sb.toString();
     }
 
-    private String performPost(String myUrl) throws IOException, JSONException{
-        DataOutputStream os = null;
-        InputStream is = null;
-
-        try{
-            URL url = new URL(myUrl);
-            HttpURLConnection conn = (HttpURLConnection)url.openConnection();
-            String urlParameters = "search?query=Tea&format=json&apiKey=p2wb5h6mtq4rw84c2d4a55jy";
-            //strings need to be turned into bytes so they can be passed properly to other programs
-            byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
-            int postDataLength = postData.length;
-
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-            conn.setRequestProperty("charset","utf-8");
-            conn.setRequestProperty("Content-Length",Integer.toString(postDataLength));
-
-            os = new DataOutputStream(conn.getOutputStream());
-            os.write(postData);
-            os.flush();
-
-            is = conn.getInputStream();
-            return readIt(is);
-        } finally {
-            if (is != null){
-                is.close();
-            }
-            if (os != null){
-                os.close();
-            }
-        }
-    }
-
-    private void parseJson(String contentAsString) throws JSONException{
+    private void parseJson(String contentAsString) throws JSONException {
         JSONObject search = new JSONObject(contentAsString);
         JSONArray items = search.getJSONArray("items");
         for (int i = 0; i < items.length(); i++) {
@@ -181,7 +148,9 @@ public class MainActivity extends AppCompatActivity {
             mItemList.add(item.getString("name"));
         }
 
-        private class DownloadTask extends AsyncTask<String,Void,Void> {
+    }
+
+        private class DownloadTask extends AsyncTask<String, Void, Void> {
 
             @Override
             protected Void doInBackground(String... strings) {
